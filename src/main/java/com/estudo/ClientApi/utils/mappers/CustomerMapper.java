@@ -15,7 +15,6 @@ public class CustomerMapper {
             return null;
         }
         CustomerEntity entity = new CustomerEntity();
-        entity.setId(customer.getId());
         entity.setName(customer.getName());
         entity.setEmail(customer.getEmail());
         return entity;
@@ -26,7 +25,7 @@ public class CustomerMapper {
         if (customerEntity == null)
             return null;
 
-        return new Customer(customerEntity.getId(), customerEntity.getName(), customerEntity.getEmail());
+        return new Customer(customerEntity.getName(), customerEntity.getEmail());
     }
 
     /*Converte dominio para DTO*/
