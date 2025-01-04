@@ -1,0 +1,64 @@
+Descrição das Pastas
+
+1. domain/
+    Contém a lógica de negócios pura.
+
+    model/: Classes de domínio que representam os conceitos principais.
+    ports/: Interfaces de entrada (casos de uso) e saída (repositórios, APIs externas).
+    services/: Implementações das regras de negócios baseadas no domínio.
+    2. application/
+
+    Orquestração de casos de uso.
+    Configurações específicas da aplicação (injeção de dependências, Beans do Spring).
+
+3. adapters/
+    Implementações de portas para tecnologias específicas.
+    Subpastas:
+        input/:
+            Interfaces externas que consomem a aplicação, como REST APIs e listeners de eventos.
+        output/:
+            Implementações de persistência e integração com serviços externos.
+4. utils/
+        Utilitários gerais usados em diferentes camadas:
+        Validadores, mapeadores, etc.
+
+---------------------------------------------------------
+
+Quem Implementa o Quê?
+Controller (Adapter de Entrada):
+Depende da interface CreateCustomerUseCase.
+Não sabe como o caso de uso está implementado.
+Interface CreateCustomerUseCase (Porta de Entrada):
+Definida na camada de domínio (ou próxima dela).
+Implementada por CreateCustomerService.
+Service (Application Layer):
+Implementa a interface CreateCustomerUseCase.
+Contém a lógica de negócio.
+Repositório (Adapter de Saída):
+Interface CustomerRepository definida como porta de saída.
+Implementada pelo repositório JPA (JpaCustomerRepository).
+
+-----------------------------------
+Fluxo Resumido
+Controller recebe a requisição HTTP e converte o DTO para objeto de domínio.
+O Controller chama o caso de uso (CreateCustomerUseCase) pela interface.
+O caso de uso executa a lógica de negócio e chama o repositório pela interface (CustomerRepository).
+O repositório salva os dados e retorna o resultado para o caso de uso.
+O caso de uso retorna o objeto criado para o Controller.
+O Controller converte o objeto para DTO e retorna a resposta HTTP.
+
+--------------------------------------------
+
+Vantagens dessa Estrutura
+Isolamento do Domínio:
+O domínio (onde está a interface) não depende de implementação.
+Isso facilita os testes e mudanças futuras.
+Flexibilidade:
+Qualquer classe que implemente a interface CreateCustomerUseCase pode ser usada, permitindo a troca de implementações facilmente (ex.: substituição por mocks em testes).
+Testabilidade:
+Como o controller e o service dependem apenas de interfaces, você pode testar cada componente isoladamente.
+Clareza:
+Cada camada tem uma responsabilidade bem definida:
+O domínio define contratos (interfaces).
+A aplicação implementa esses contratos.
+O controlador coordena a comunicação com a aplicação.
