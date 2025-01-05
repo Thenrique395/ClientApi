@@ -6,12 +6,13 @@ import com.estudo.ClientApi.domain.ports.output.CustomerRepository;
 import com.estudo.ClientApi.utils.mappers.CustomerMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class JpaCustomerRepository  implements CustomerRepository {
+public class JpaCustomerRepository implements CustomerRepository {
 
-    private final  SpringDataCustomerRepository springDataCustomerRepository;
+    private final SpringDataCustomerRepository springDataCustomerRepository;
     private final CustomerMapper customerMapper;
 
     public JpaCustomerRepository(SpringDataCustomerRepository springDataCustomerRepository, CustomerMapper customerMapper) {
@@ -21,19 +22,27 @@ public class JpaCustomerRepository  implements CustomerRepository {
 
     @Override
     public Customer save(Customer customer) {
-        CustomerEntity entity = customerMapper.toEntity(customer);
-        return  customerMapper.toDomain(springDataCustomerRepository.save(entity));
+        CustomerEntity entity = CustomerMapper.toEntity(customer);
+        return CustomerMapper.toDomain(springDataCustomerRepository.save(entity));
     }
 
     @Override
     public Optional<Customer> findById(Long id) {
-        var custumer = springDataCustomerRepository.findById(id);
+        var customerEntity = springDataCustomerRepository.findById(id);
+        Optional<Customer> optionalCustomer = customerEntity
+                .map(entity -> new Customer(entity.getName(), entity.getEmail()));
 
-        return  null;
+        return optionalCustomer;
+    }
+
+    @Override
+    public List<Customer> findAll() {
+        var customerEntity = springDataCustomerRepository.findAll();
+        return CustomerMapper.toListDomain(customerEntity);
     }
 
     @Override
     public void deleteById(Long id) {
- springDataCustomerRepository.deleteById(id);
+        springDataCustomerRepository.deleteById(id);
     }
 }

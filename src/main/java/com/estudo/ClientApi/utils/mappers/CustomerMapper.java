@@ -6,6 +6,10 @@ import com.estudo.ClientApi.domain.model.Customer;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CustomerMapper {
@@ -23,6 +27,14 @@ public class CustomerMapper {
             return null;
 
         return new Customer(customerEntity.getName(), customerEntity.getEmail());
+    }
+
+    public static ArrayList<Customer> toListDomain(List<CustomerEntity> customersEntity) {
+        if (customersEntity.isEmpty())
+            return new ArrayList<Customer>();
+
+        return customersEntity.stream()
+                .map(CustomerMapper::toDomain).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static CustomerDTO toDto(Customer customer) {
