@@ -1,6 +1,5 @@
 package com.estudo.ClientApi.application.usecases;
 
-import com.estudo.ClientApi.domain.exceptions.CustomerNotFoundException;
 import com.estudo.ClientApi.domain.model.Customer;
 import com.estudo.ClientApi.domain.ports.input.IFindCustomerUseCase;
 import com.estudo.ClientApi.domain.ports.output.CustomerRepository;

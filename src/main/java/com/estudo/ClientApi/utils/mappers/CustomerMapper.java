@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +41,14 @@ public class CustomerMapper {
             return null;
 
         return new CustomerDTO(customer.getName(), customer.getEmail(), 1, LocalDate.of(1991, 2, 3), null);
+    }
+
+    public static ArrayList<CustomerDTO> toListDto(List<Customer> customers) {
+        if (customers.isEmpty())
+            return new ArrayList<CustomerDTO>();
+
+        return customers.stream()
+                .map(CustomerMapper::toDto).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static Customer toDomain(CustomerDTO customerDTO) {

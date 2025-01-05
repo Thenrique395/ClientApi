@@ -1,7 +1,5 @@
 package com.estudo.ClientApi.domain.ports.output;
 
-
-import com.estudo.ClientApi.adapters.output.persistence.entities.CustomerEntity;
 import com.estudo.ClientApi.domain.model.Customer;
 
 import java.util.List;
